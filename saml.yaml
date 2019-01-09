@@ -6,20 +6,71 @@ Parameters:
     OriginUrl:
         Description: "The origin url to allow CORS requests from. This will be the base URL of your static SAM website."
         Type: "String"
+
+Globals:
+  Function:
+    Runtime: nodejs8.10
+    Timeout: 180
+    Handler: index.handler
+    # Environment:
+    #   Variables:
+    #     TABLE_NAME: data-table
+
 Resources:
     GetSAMPartyCount:
         Type: AWS::Serverless::Function
         Properties:
-            Handler: index.handler
-            Runtime: nodejs8.10
-            CodeUri: ./
+            CodeUri: ./ # AutoPublishAlias will publish a new version only when the CodeUri changes. Updates to other configuration (ex: MemorySize, Timeout) etc will not publish a new version. Hence your Alias will continue to point to old version that uses the old configurations.
             Environment:
                 Variables:
                     SAM_MULTIPLIER: !Ref SamMultipler
                     ORIGIN_URL: !Ref OriginUrl
+            AutoPublishAlias: live
+            DeploymentPreference:
+            Type: AllAtOnce
+            Alarms:
+                # A list of alarms that you want to monitor
+                - !Ref AliasErrorMetricGreaterThanZeroAlarm
+                - !Ref LatestVersionErrorMetricGreaterThanZeroAlarm
             Events:
               GetResource:
                 Type: Api
                 Properties:
                   Path: /sam
                   Method: get
+
+    AliasErrorMetricGreaterThanZeroAlarm:
+        Type: "AWS::CloudWatch::Alarm"
+        Properties:
+            AlarmDescription: Lambda Function Error > 0
+            ComparisonOperator: GreaterThanThreshold
+            Dimensions:
+                - Name: Resource
+                  Value: !Sub "${GetSAMPartyCount}:live"
+                - Name: FunctionName
+                  Value: !Ref GetSAMPartyCount
+            EvaluationPeriods: 2
+            MetricName: Errors
+            Namespace: AWS/Lambda
+            Period: 60
+            Statistic: Sum
+            Threshold: 0
+
+    LatestVersionErrorMetricGreaterThanZeroAlarm:
+        Type: "AWS::CloudWatch::Alarm"
+        Properties:
+            AlarmDescription: Lambda Function Error > 0
+            ComparisonOperator: GreaterThanThreshold
+            Dimensions:
+                - Name: Resource
+                  Value: !Sub "${GetSAMPartyCount}:live"
+                - Name: FunctionName
+                  Value: !Ref GetSAMPartyCount
+                - Name: ExecutedVersion
+                  Value: !GetAtt GetSAMPartyCount.Version.Version
+            EvaluationPeriods: 2
+            MetricName: Errors
+            Namespace: AWS/Lambda
+            Period: 60
+            Statistic: Sum
+            Threshold: 0
