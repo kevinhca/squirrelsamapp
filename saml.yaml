@@ -29,7 +29,7 @@ Resources:
             DeploymentPreference:
                 Type: AllAtOnce
                 Alarms:
-                    # A list of alarms that you want to monitor
+                    # A list of alarms that you want to monitor 
                     - !Ref AliasErrorMetricGreaterThanZeroAlarm
                     - !Ref LatestVersionErrorMetricGreaterThanZeroAlarm
             Events:
