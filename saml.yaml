@@ -20,7 +20,8 @@ Resources:
     GetSAMPartyCount:
         Type: AWS::Serverless::Function
         Properties:
-            CodeUri: ./ # AutoPublishAlias will publish a new version only when the CodeUri changes. Updates to other configuration (ex: MemorySize, Timeout) etc will not publish a new version. Hence your Alias will continue to point to old version that uses the old configurations.
+            # AutoPublishAlias will publish a new version only when the CodeUri changes. Updates to other configuration (ex: MemorySize, Timeout) etc will not publish a new version. Hence your Alias will continue to point to old version that uses the old configurations.
+            CodeUri: ./
             Environment:
                 Variables:
                     SAM_MULTIPLIER: !Ref SamMultipler
