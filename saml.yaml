@@ -48,7 +48,7 @@ Resources:
                 - Name: Resource
                   Value: !Sub "${GetSAMPartyCount}:live"
                 - Name: FunctionName
-                  Value: !Ref GetSAMPartyCount
+                  Value: !Ref "${GetSAMPartyCount}"
             EvaluationPeriods: 2
             MetricName: Errors
             Namespace: AWS/Lambda
@@ -65,9 +65,9 @@ Resources:
                 - Name: Resource
                   Value: !Sub "${GetSAMPartyCount}:live"
                 - Name: FunctionName
-                  Value: !Ref GetSAMPartyCount
+                  Value: !Ref "${GetSAMPartyCount}"
                 - Name: ExecutedVersion
-                  Value: !GetAtt GetSAMPartyCount.Version.Version
+                  Value: !GetAtt "${GetSAMPartyCount}.Version.Version"
             EvaluationPeriods: 2
             MetricName: Errors
             Namespace: AWS/Lambda
