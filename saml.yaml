@@ -12,9 +12,6 @@ Globals:
     Runtime: nodejs8.10
     Timeout: 180
     Handler: index.handler
-    # Environment:
-    #   Variables:
-    #     TABLE_NAME: data-table
 
 Resources:
     GetSAMPartyCount:
