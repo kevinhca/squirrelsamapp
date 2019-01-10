@@ -1,6 +1,6 @@
 {
     "Parameters": {
-        "SamMultipler": "5",
+        "SamMultipler": "30",
         "OriginUrl": "*"
     }
 }

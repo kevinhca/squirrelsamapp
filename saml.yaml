@@ -28,7 +28,7 @@ Resources:
                     ORIGIN_URL: !Ref OriginUrl
             AutoPublishAlias: live
             DeploymentPreference:
-                Type: Linear10PercentEvery1Minute
+                Type: Canary10Percent5Minutes
                 Alarms:
                     # A list of alarms that you want to monitor 
                     - !Ref AliasErrorMetricGreaterThanZeroAlarm
